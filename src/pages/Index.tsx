@@ -1,11 +1,10 @@
 import { useEffect, useState, useCallback } from "react"
-import { supabase, getLeads, getLeadsStats, Lead, LeadsStats, isSupabaseConfigured } from "@/lib/supabase"
+import { supabase, getLeads, getLeadsStats, Lead, LeadsStats } from "@/lib/supabase"
 import { DashboardHeader } from "@/components/DashboardHeader"
 import { StatsCard } from "@/components/StatsCard"
 import { LeadsTable } from "@/components/LeadsTable"
 import { LeadsFilter } from "@/components/LeadsFilter"
-import { Users, TrendingUp, Clock, CheckCircle2, Radio, Loader2, AlertTriangle } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
+import { Users, TrendingUp, Clock, CheckCircle2, Radio, Loader2 } from "lucide-react"
 
 export default function Index() {
   const [leads, setLeads] = useState<Lead[]>([])
@@ -32,7 +31,7 @@ export default function Index() {
   useEffect(() => {
     loadData()
 
-    if (!supabase) return
+    
 
     // Configura Realtime
     const channel = supabase
@@ -89,25 +88,6 @@ export default function Index() {
     ? leads
     : leads.filter(lead => lead.status === statusFilter)
 
-  if (!isSupabaseConfigured) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-        <Card className="max-w-md w-full">
-          <CardContent className="pt-6 text-center">
-            <AlertTriangle className="h-12 w-12 text-warning mx-auto mb-4" />
-            <h2 className="text-xl font-semibold mb-2">Configuração Necessária</h2>
-            <p className="text-muted-foreground mb-4">
-              Configure as variáveis de ambiente do Supabase para conectar ao banco de dados.
-            </p>
-            <code className="block bg-muted p-3 rounded-lg text-sm text-left">
-              VITE_SUPABASE_URL<br/>
-              VITE_SUPABASE_ANON_KEY
-            </code>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  }
 
   if (loading) {
     return (

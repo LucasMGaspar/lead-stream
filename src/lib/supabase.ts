@@ -1,14 +1,11 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
+// Supabase credentials (anon key is safe for frontend)
+const supabaseUrl = 'https://sphtqakrgjowpabrylos.supabase.co'
+const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNwaHRxYWtyZ2pvd3BhYnJ5bG9zIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc5MTk1MTUsImV4cCI6MjA4MzQ5NTUxNX0.YlGIGNg5gWbY11shU6-JfouhslECqIOLsBQMzQ_HJHE'
 
-export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
-
-// Only create client if credentials exist
-export const supabase: SupabaseClient | null = isSupabaseConfigured 
-  ? createClient(supabaseUrl!, supabaseAnonKey!)
-  : null
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const isSupabaseConfigured = true
 
 export type LeadStatus = 'novo' | 'aguardando_resposta' | 'em_atendimento' | 'ganho' | 'perdido'
 
@@ -33,11 +30,6 @@ export interface LeadsStats {
 }
 
 export async function getLeads(): Promise<Lead[]> {
-  if (!supabase) {
-    console.warn('Supabase não configurado')
-    return []
-  }
-  
   const { data, error } = await supabase
     .from('leads')
     .select('*')
@@ -51,10 +43,6 @@ export async function getLeads(): Promise<Lead[]> {
 }
 
 export async function getLeadsStats(): Promise<LeadsStats> {
-  if (!supabase) {
-    return { total: 0, novos: 0, aguardando: 0, responderam: 0 }
-  }
-  
   const { data, error } = await supabase
     .from('leads')
     .select('status, respondeu')
