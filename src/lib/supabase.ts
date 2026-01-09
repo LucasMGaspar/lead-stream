@@ -1,11 +1,14 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || ''
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || ''
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
+
+// Only create client if credentials exist
+export const supabase: SupabaseClient | null = isSupabaseConfigured 
+  ? createClient(supabaseUrl!, supabaseAnonKey!)
+  : null
 
 export type LeadStatus = 'novo' | 'aguardando_resposta' | 'em_atendimento' | 'ganho' | 'perdido'
 
@@ -30,7 +33,7 @@ export interface LeadsStats {
 }
 
 export async function getLeads(): Promise<Lead[]> {
-  if (!isSupabaseConfigured) {
+  if (!supabase) {
     console.warn('Supabase não configurado')
     return []
   }
@@ -48,7 +51,7 @@ export async function getLeads(): Promise<Lead[]> {
 }
 
 export async function getLeadsStats(): Promise<LeadsStats> {
-  if (!isSupabaseConfigured) {
+  if (!supabase) {
     return { total: 0, novos: 0, aguardando: 0, responderam: 0 }
   }
   

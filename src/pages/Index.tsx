@@ -32,6 +32,8 @@ export default function Index() {
   useEffect(() => {
     loadData()
 
+    if (!supabase) return
+
     // Configura Realtime
     const channel = supabase
       .channel('leads-realtime')
