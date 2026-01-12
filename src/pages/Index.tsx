@@ -99,44 +99,48 @@ export default function Index() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/20">
       <DashboardHeader isConnected={isConnected} onRefresh={loadData} />
       
-      <main className="container mx-auto px-4 py-8 space-y-8">
+      <main className="container mx-auto px-6 py-8 space-y-8">
         {/* Stats Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
           <StatsCard
             title="Total de Leads"
             value={stats.total}
-            description="Todos os leads"
+            description="Todos os leads cadastrados"
             icon={Users}
             variant="default"
+            className="animate-in stagger-1"
           />
           <StatsCard
             title="Novos"
             value={stats.novos}
-            description="Não contatados"
+            description="Aguardando primeiro contato"
             icon={TrendingUp}
             variant="primary"
+            className="animate-in stagger-2"
           />
           <StatsCard
             title="Aguardando"
             value={stats.aguardando}
-            description="Sem resposta"
+            description="Pendente de resposta"
             icon={Clock}
             variant="warning"
+            className="animate-in stagger-3"
           />
           <StatsCard
             title="Responderam"
             value={stats.responderam}
-            description="Em atendimento"
+            description="Leads engajados"
             icon={CheckCircle2}
             variant="success"
+            className="animate-in stagger-4"
           />
         </section>
 
         {/* Filter & Table */}
-        <section className="space-y-4">
+        <section className="space-y-5 animate-in" style={{ animationDelay: '0.25s' }}>
           <LeadsFilter
             value={statusFilter}
             onChange={setStatusFilter}
@@ -147,11 +151,20 @@ export default function Index() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t bg-card/50 py-4 mt-8">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-            <Radio className="h-3 w-3 text-success realtime-pulse" />
-            <span>Atualização em tempo real • Instantâneo</span>
+      <footer className="border-t border-border/50 bg-card/30 backdrop-blur-sm py-6 mt-12">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 border border-success/20">
+                <Radio className="h-3 w-3 text-success realtime-pulse" />
+                <span className="font-medium text-success">Realtime Ativo</span>
+              </div>
+              <span>•</span>
+              <span>Atualizações instantâneas</span>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              © 2025 CRM Corretor • Gestão Inteligente de Leads
+            </p>
           </div>
         </div>
       </footer>
