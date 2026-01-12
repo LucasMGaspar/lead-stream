@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Building2, RefreshCw, Radio, Sparkles } from "lucide-react"
+import { ThemeToggle } from "./ThemeToggle"
 
 interface DashboardHeaderProps {
   isConnected: boolean
@@ -45,6 +46,8 @@ export function DashboardHeader({ isConnected, onRefresh }: DashboardHeaderProps
               <Radio className="h-3 w-3 mr-2" />
               {isConnected ? 'Realtime Ativo' : 'Desconectado'}
             </Badge>
+            
+            <ThemeToggle />
             
             <Button 
               variant="outline" 
